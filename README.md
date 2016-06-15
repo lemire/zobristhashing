@@ -35,8 +35,16 @@ make
 ./benchmark
 ```
 
+## Relevant software libraries
+
+ - https://github.com/lemire/StronglyUniversalStringHashing
+ - https://github.com/lemire/clhash
+
 
 ## References
 
 - Daniel Lemire, The universality of iterated hashing over variable-length strings, Discrete Applied Mathematics 160 (4-5), 2012. http://arxiv.org/abs/1008.1715
--  Owen Kaser, Daniel Lemire, Strongly universal string hashing is fast, Computer Journal 57(11), 2014. http://arxiv.org/abs/1202.4961
+- Owen Kaser, Daniel Lemire, Strongly universal string hashing is fast, Computer Journal 57(11), 2014. http://arxiv.org/abs/1202.4961
+- Daniel Lemire, Owen Kaser, Faster 64-bit universal hashing using carry-less multiplications, Journal of Cryptographic Engineering (to appear) http://arxiv.org/abs/1503.03465
+
+
