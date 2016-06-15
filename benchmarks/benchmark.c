@@ -80,4 +80,5 @@ void demo() {
 
 int main() {
     demo();
+    printf("sizeof(zobrist_t) = %d\n", (int) sizeof(zobrist_t));
 }
