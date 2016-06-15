@@ -27,6 +27,29 @@
         (cycles) = ((uint64_t)cyc_high << 32) | cyc_low;                      \
     } while (0)
 
+static __attribute__ ((noinline))
+uint64_t rdtsc_overhead_func(uint64_t dummy) {
+    return dummy;
+}
+
+uint64_t global_rdtsc_overhead = (uint64_t) UINT64_MAX;
+
+#define RDTSC_SET_OVERHEAD(test, repeat)			      \
+  do {								      \
+    uint64_t cycles_start, cycles_final, cycles_diff;		      \
+    uint64_t min_diff = UINT64_MAX;				      \
+    for (int i = 0; i < repeat; i++) {			      \
+      __asm volatile("" ::: /* pretend to clobber */ "memory");	      \
+      RDTSC_START(cycles_start);				      \
+      test;							      \
+      RDTSC_FINAL(cycles_final);                                       \
+      cycles_diff = (cycles_final - cycles_start);		      \
+      if (cycles_diff < min_diff) min_diff = cycles_diff;	      \
+    }								      \
+    global_rdtsc_overhead = min_diff;				      \
+    printf("rdtsc_overhead set to %d\n", (int)global_rdtsc_overhead);     \
+  } while (0)							      \
+
 
 /*
  * Prints the best number of operations per cycle where
@@ -35,6 +58,9 @@
  */
 #define BEST_TIME(test, expected, repeat, pre, size)                           \
     do {                                                              \
+        if (global_rdtsc_overhead == UINT64_MAX) {                    \
+           RDTSC_SET_OVERHEAD(rdtsc_overhead_func(1), repeat);        \
+        }                                                             \
         printf("%s: ", #test);                                        \
         fflush(NULL);                                                 \
         uint64_t cycles_start, cycles_final, cycles_diff;             \
@@ -49,6 +75,7 @@
             cycles_diff = (cycles_final - cycles_start);              \
             if (cycles_diff < min_diff) min_diff = cycles_diff;       \
         }                                                             \
+        min_diff -= global_rdtsc_overhead;                            \
         uint64_t S = (uint64_t)size;                                  \
         float cycle_per_op = (min_diff) / (float)S;                   \
         float bytes_per_cycle = (float) S / (float) (min_diff);       \
@@ -75,8 +102,6 @@ void demo() {
       uint64_t expected = zobrist (data, size, &k);
       printf(" repeatedly hashing the same string  : ");
       BEST_TIME(zobrist (data, size, &k), expected, repeat, , size);
-      printf(" cache flush between hashing calls   : "); 
-      BEST_TIME(zobrist (data, size, &k), expected, repeat, flush(data, size, &k), size);
       free(data);
     }
 }
