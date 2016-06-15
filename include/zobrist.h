@@ -15,7 +15,14 @@ void init_zobrist(zobrist_t * k);
 
 /**
 * hash string s of length "length" given keys, length should
-* not exceed MAX_ZOBRIST_LENGTH.
+* not exceed MAX_ZOBRIST_LENGTH or theoretical analysis fails.
 */
 uint64_t zobrist (const char *s, size_t length, const zobrist_t * k);
+
+/**
+* Same but for null-terminated strings.
+*/
+uint64_t zobrist_nt (const char *s, const zobrist_t * k);
+
+
 #endif

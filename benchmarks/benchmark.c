@@ -52,7 +52,7 @@
         uint64_t S = (uint64_t)size;                                  \
         float cycle_per_op = (min_diff) / (float)S;                   \
         float bytes_per_cycle = (float) S / (float) (min_diff);       \
-        printf("size = %d,  %.2f cycles per byte or %.2F bytes per cycle ", size, cycle_per_op, bytes_per_cycle);           \
+        printf("size = %d,  %.2f cycles per byte or %.2f bytes per cycle ", size, cycle_per_op, bytes_per_cycle);           \
         if (wrong_answer) printf(" [ERROR]");                         \
         printf("\n");                                                 \
         fflush(NULL);                                                 \
@@ -73,7 +73,9 @@ void demo() {
       char * data = malloc(size);
       for(int z = 0; z < size; ++z) data[z] = (char) rand();
       uint64_t expected = zobrist (data, size, &k);
+      printf(" repeatedly hashing the same string  : ");
       BEST_TIME(zobrist (data, size, &k), expected, repeat, , size);
+      printf(" cache flush between hashing calls   : "); 
       BEST_TIME(zobrist (data, size, &k), expected, repeat, flush(data, size, &k), size);
       free(data);
     }
