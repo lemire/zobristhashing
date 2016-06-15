@@ -23,11 +23,16 @@ uint64_t zobrist (const char *s, size_t length, const zobrist_t * k) {
     uint64_t h = 0;
     if(length > MAX_ZOBRIST_LENGTH) length = MAX_ZOBRIST_LENGTH;
     size_t i = 0;
-    for ( ; i + 3  < length ; i+= 4 ) {
+    for ( ; i + 7  < length ; i+= 8 ) {
       h ^= k->hashtab [ i ] [(unsigned char)s[i]];
       h ^= k->hashtab [ i + 1 ] [(unsigned char)s[i+1]];
       h ^= k->hashtab [ i + 2 ] [(unsigned char)s[i+2]];
       h ^= k->hashtab [ i + 3 ] [(unsigned char)s[i+3]];
+      h ^= k->hashtab [ i + 3 ] [(unsigned char)s[i+3]];
+      h ^= k->hashtab [ i + 4 ] [(unsigned char)s[i+4]];
+      h ^= k->hashtab [ i + 5 ] [(unsigned char)s[i+5]];
+      h ^= k->hashtab [ i + 6 ] [(unsigned char)s[i+6]];
+      h ^= k->hashtab [ i + 7 ] [(unsigned char)s[i+7]];
     }
     for (; i < length ; i++ )
       h ^= k->hashtab [ i ] [(unsigned char)s[i]];
