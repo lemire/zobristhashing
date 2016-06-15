@@ -21,7 +21,15 @@ void init_zobrist(zobrist_t * k) {
 
 uint64_t zobrist (const char *s, size_t length, const zobrist_t * k) {
     uint64_t h = 0;
-    for (size_t i = 0 ; i < length ; i++ )
-      h ^= k->hashtab [ i % MAX_ZOBRIST_LENGTH ] [(unsigned char)s[i]];
+    if(length > MAX_ZOBRIST_LENGTH) length = MAX_ZOBRIST_LENGTH;
+    size_t i = 0;
+    for ( ; i + 3  < length ; i+= 4 ) {
+      h ^= k->hashtab [ i ] [(unsigned char)s[i]];
+      h ^= k->hashtab [ i + 1 ] [(unsigned char)s[i+1]];
+      h ^= k->hashtab [ i + 2 ] [(unsigned char)s[i+2]];
+      h ^= k->hashtab [ i + 3 ] [(unsigned char)s[i+3]];
+    }
+    for (; i < length ; i++ )
+      h ^= k->hashtab [ i ] [(unsigned char)s[i]];
     return h;
 }

@@ -51,7 +51,8 @@
         }                                                             \
         uint64_t S = (uint64_t)size;                                  \
         float cycle_per_op = (min_diff) / (float)S;                   \
-        printf("size = %d,  %.2f cycles per operation", size, cycle_per_op);           \
+        float bytes_per_cycle = (float) S / (float) (min_diff);       \
+        printf("size = %d,  %.2f cycles per byte or %.2F bytes per cycle ", size, cycle_per_op, bytes_per_cycle);           \
         if (wrong_answer) printf(" [ERROR]");                         \
         printf("\n");                                                 \
         fflush(NULL);                                                 \
