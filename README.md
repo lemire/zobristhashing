@@ -1,14 +1,17 @@
 # zobristhashing
 Zobrist hashing in C
 
-Zobrist hashing is the simplest form of tabulation-based hashing. See https://en.wikipedia.org/wiki/Zobrist_hashing
-It can be shown to be 3-wise independent.
+[Zobrist hashing](https://en.wikipedia.org/wiki/Zobrist_hashing) is the simplest form of [tabulation-based hashing](https://en.wikipedia.org/wiki/Tabulation_hashing). It can be shown to be 3-wise independent. The Zobrist approach tested here is used in real systems, e.g., Gigablast https://www.gigablast.com/ Alternatively, one could use a tabulation-based function as a complement to other hash functions: first hash the content down to a few bytes (e.g., 4) and then apply a tabulation-based hash on the result.
+
+Tabulation-based hashing uses a lot of memory and is susceptible to cache faults. Moreover, its speed is limited (in part) by the system's ability to issue random access loads.
 
 This C code expects a GCC-like compiler on an x64 system.
 
 The code demonstrates that it is difficult on a x64 to hash much more than 0.65 bytes per cycle on recent Intel processors, even when
 repeatedly hashing the same short string. In contrast, it is possible to hash 4 to 10 bytes per cycle using fast hash 
 families. See https://github.com/lemire/StronglyUniversalStringHashing
+
+
 
 ## C Usage
 ```C
