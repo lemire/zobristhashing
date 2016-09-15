@@ -5,10 +5,13 @@ Zobrist hashing in C
 
 Tabulation-based hashing uses a lot of memory and is susceptible to cache faults. E.g., to hash  4-byte strings to 64-bit values, you need 8 KB. Moreover, its speed is limited (in part) by the system's ability to issue random access loads.
 
+In an exhaustive experimental evaluation of hash-table performance, Richter et al. ([VLDB, 2016](https://infosys.cs.uni-saarland.de/publications/p249-richter.pdf)) found that Zobrist hashing produces a low throughput. Consequently, the authors declare it to be "less attractive in practice" than its strong randomness properties would suggest.
+
+
 This C code expects a GCC-like compiler on an x64 system.
 
 The code demonstrates that it is difficult on a x64 to hash much more than 0.65 bytes per cycle on recent Intel processors, even when
-repeatedly hashing the same short string. In contrast, it is possible to hash 4 to 10 bytes per cycle using fast hash 
+repeatedly hashing the same short string. In contrast, it is possible to hash 4 to 10 bytes per cycle using fast hash
 families. See https://github.com/lemire/StronglyUniversalStringHashing
 
 
@@ -27,7 +30,7 @@ uint64_t hashvalue = zobrist_nt (mystring,  &k)
 // strings longer than 256 bytes fail the theoretical bounds
 ```
 
-## Usage 
+## Usage
 
 ```
 make
@@ -45,5 +48,3 @@ make
 - Daniel Lemire, The universality of iterated hashing over variable-length strings, Discrete Applied Mathematics 160 (4-5), 2012. http://arxiv.org/abs/1008.1715
 - Owen Kaser, Daniel Lemire, Strongly universal string hashing is fast, Computer Journal 57(11), 2014. http://arxiv.org/abs/1202.4961
 - Daniel Lemire, Owen Kaser, Faster 64-bit universal hashing using carry-less multiplications, Journal of Cryptographic Engineering (to appear) http://arxiv.org/abs/1503.03465
-
-
